@@ -10,9 +10,9 @@ use GraphQL\Type\Definition\ObjectType;
 
 class NewRelicReportData
 {
-    const PREFIX = '/GraphQl/Controller/GraphQl\\';
-    const BACKSLASH = '\\';
-    const MULTIPLE_QUERIES_FLAG = 'Multiple';
+    private const PREFIX = '/GraphQl/Controller/GraphQl';
+    private const SEPARATOR = '/';
+    private const MULTIPLE_QUERIES_FLAG = 'Multiple';
 
     /**
      * Get transaction data from GraphQl schema
@@ -63,7 +63,7 @@ class NewRelicReportData
 
     /**
      * @param $schema
-     * @return \GraphQL\Type\Definition\ObjectType
+     * @return ObjectType
      */
     private function getGqlFieldsInfo($schema)
     {
@@ -83,14 +83,14 @@ class NewRelicReportData
 
     /**
      * Build a transaction name based on query type and operation name
-     * format: /GraphQl/Controller/GraphQl\{operation name|(query|mutation)}\{name|Multiple}
+     * format: /GraphQl/Controller/GraphQl/{operation name|(query|mutation)}/{name|Multiple}
      * @param $gqlCallType
      * @param string $operationName
      * @return string
      */
     private function buildTransactionName($gqlCallType, $operationName)
     {
-        return self::PREFIX . $gqlCallType . self::BACKSLASH . $operationName;
+        return self::PREFIX . self::SEPARATOR . $gqlCallType . self::SEPARATOR . $operationName;
     }
 
     /**

@@ -3,7 +3,28 @@
     <type name="Magento\Framework\GraphQl\Query\QueryProcessor">
         <plugin name="newRelicNameTransaction" sortOrder="10" type="JomaShop\NewRelicMonitoring\Plugin\NewRelicMonitoring"/>
     </type>
+    <type name="Magento\GraphQl\Controller\GraphQl">
+        <plugin name="new_relic_client_version" sortOrder="10" type="JomaShop\NewRelicMonitoring\Plugin\NewRelicClientVersion"/>
+    </type>
     <type name="Magento\Framework\GraphQl\Query\ErrorHandler">
         <plugin name="send_exception_trace_to_newrelic" type="JomaShop\NewRelicMonitoring\Plugin\ErrorHandler"/>
     </type>
+
+    <!-- Disable 2.4.4 GQL logging; we could look into adding a preference -->
+    <!-- Use Null Logger -->
+    <!-- Use null 'getData' to avoid the extra work -->
+    <preference
+            for="Magento\GraphQl\Model\Query\Logger\LoggerInterface"
+            type="JomaShop\NewRelicMonitoring\Model\NullLogger\NullNewRelicLogger"/>
+    <type name="Magento\GraphQl\Model\Query\Logger\LoggerPool">
+        <arguments>
+            <argument name="loggers" xsi:type="array">
+                <item name="newRelic" xsi:type="object">JomaShop\NewRelicMonitoring\Model\NullLogger\NullNewRelicLogger</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference
+            for="Magento\GraphQl\Helper\Query\Logger\LogData"
+            type="JomaShop\NewRelicMonitoring\Model\NullLogger\NullGetLogData"/>
+    <!-- End -->
 </config>

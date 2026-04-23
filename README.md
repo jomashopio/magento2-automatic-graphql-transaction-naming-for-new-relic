@@ -37,7 +37,7 @@ mutation createCustomerTest{
   }
 }
 ```
-In New Relic, the transaction name would be: `/GraphQl/Controller/GraphQl\Mutation\createCustomerTest`
+In New Relic, the transaction name would be: `/GraphQl/Controller/GraphQl/Mutation/createCustomerTest`
 
 2. Operation name is not set and only 1 query/mutation is requested
 ```graphql
@@ -61,7 +61,7 @@ mutation {
 }
 ```
 
-In NR, the transaction name would be `/GraphQl/Controller/GraphQl\Mutation\createCustomer`
+In NR, the transaction name would be `/GraphQl/Controller/GraphQl/Mutation/createCustomer`
 
 3. Operation name is not set and multiple queries/mutations are requested
 ```graphql
@@ -95,8 +95,24 @@ query {
 }
 ```
 
-In NR, the transaction name would be `/GraphQl/Controller/GraphQl\Query\Multiple`
+In NR, the transaction name would be `/GraphQl/Controller/GraphQl/Query/Multiple`
 
-## Change Log
-- v1.1.1: Send requested fields as a custom parameter to NR
-- v1.1.0: Able to log GraphQl errors
+---
+### Other features
+This module also supports using `newrelic_add_custom_parameter` instead of `newrelic_notice_error`.
+- See ErrorHandler and ReportErrorEvaluatorInterface
+- This can be used to reduce the number of `GraphQlInputException` / `GraphQlAuthorizationException` / `GraphQlAuthenticationException` which are logged as errors
+- Data is set to ExceptionIsSkipReportError / ExceptionClass / ExceptionMessage
+
+Error extraction:
+- If the error is an `AggregateExceptionInterface` the module tries to use the inner error.
+- If the error is a `LocalizedException` then ExceptionRawMessage is set as a custom parameter
+
+If the header `x-client-version` is set then ClientVersion is set as a custom parameter
+- This can be used to track the Frontend Version sending the GQL request
+
+Core Magento logging from 2.4.4 is disabled as running both is does not provide extra value
+
+If Magento >= 2.4.7 is used the extracted data changes
+- The AST is parsed to extract various data
+- <2.4.7 parses the string

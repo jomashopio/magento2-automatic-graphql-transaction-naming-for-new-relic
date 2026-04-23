@@ -5,6 +5,7 @@
 
 namespace JomaShop\NewRelicMonitoring\Plugin;
 
+use GraphQL\Language\AST\DocumentNode;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema;
@@ -46,11 +47,16 @@ class NewRelicMonitoring
     public function beforeProcess(
         QueryProcessor $subject,
         Schema $schema,
-        string $source,
+        DocumentNode|string $source,
         ContextInterface $contextValue = null,
         array $variableValues = null,
         string $operationName = null
     ) {
+        if (!$this->newRelicWrapper->isExtensionInstalled()) {
+            // No need to extract the data
+            return;
+        }
+
         $transactionData = $this->dataHelper->getTransactionData($schema, $source);
         if (empty($transactionData)) {
             return;

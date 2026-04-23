@@ -60,6 +60,11 @@ class ErrorHandler
             $data['extraData']['ExceptionAggregateMessage'] = $firstInnerError->getMessage();
         }
 
+        // Add raw message from LocalizedException (With placeholders)
+        if ($data['errorToReport'] instanceof LocalizedException) {
+            $data['extraData']['ExceptionRawMessage'] = $data['errorToReport']->getRawMessage();
+        }
+
         return $data;
     }
 }

@@ -51,6 +51,11 @@ class NewRelicMonitoring
         array $variableValues = null,
         string $operationName = null
     ) {
+        if (!$this->newRelicWrapper->isExtensionInstalled()) {
+            // No need to extract the data
+            return;
+        }
+
         $transactionData = $this->dataHelper->getTransactionData($schema, $source);
         if (empty($transactionData)) {
             return;

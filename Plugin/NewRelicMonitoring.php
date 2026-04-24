@@ -48,9 +48,9 @@ class NewRelicMonitoring
         QueryProcessor $subject,
         Schema $schema,
         DocumentNode|string $source,
-        ContextInterface $contextValue = null,
-        array $variableValues = null,
-        string $operationName = null
+        ?ContextInterface $contextValue = null,
+        ?array $variableValues = null,
+        ?string $operationName = null
     ) {
         if (!$this->newRelicWrapper->isExtensionInstalled()) {
             // No need to extract the data

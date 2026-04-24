@@ -1,4 +1,7 @@
 # Change Log
+## v2.0.1
+
+* PHP 8.4 Compatibility - Fixing Implicitly marking parameter as nullable is deprecated
 
 ## v2.0.0
 * Improved error extraction for `LocalizedException` and `AggregateExceptionInterface`
